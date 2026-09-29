@@ -6,6 +6,15 @@
 {% if user.is_authenticated %}
 
     <p>Currently logged in as: {{ user.username }}</p>
+    <br>
+    <p>Add a new message:</p>
+    <form action='/messaging/' method="POST">
+        {% csrf_token %}
+
+        <input type="text" name="mymessage"/><br/>
+        <input type="submit" value="Send"/>
+    </form>
+
     
 
 {% else %}
@@ -15,14 +24,14 @@
 
 
 {% for a in messages %}
-
-		<li>{{a}}
+<br>        
+		<li> <b>From: {{a.user}}</b>
+            <br>
+            {{a.text}}
 		</li>
 
 		{% endfor %}
 		</ul>
-
-<p><b>This text is bold.</b></p>
 
 </body>
 </html>
