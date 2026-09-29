@@ -20,9 +20,10 @@ def index(request):
         print(a_user.id)
 
         query = f"INSERT INTO messaging_message (user_id,text) VALUES ({a_user.id}," + f"'{mymessage}');"
-        #INSERT INTO messaging_message (user_id,text) VALUES (1,"Hello, world");
+        
         with connection.cursor() as cursor:
-            cursor.execute(query)
+            cursor.executescript(query)
+            #Should be just cursor.execute!
 
         messagez = Message.objects.all()
         context = {'messages': messagez}
