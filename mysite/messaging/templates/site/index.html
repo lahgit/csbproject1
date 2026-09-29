@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<p></p>
+{% if user.is_authenticated %}
+
+    <p>Currently logged in as: {{ user.username }}</p>
+    
+
+{% else %}
+    <p>You are currently not logged in</p>
+
+{% endif %}
+
+
+{% for a in messages %}
+
+		<li>{{a}}
+		</li>
+
+		{% endfor %}
+		</ul>
+
+<p><b>This text is bold.</b></p>
+
+</body>
+</html>
