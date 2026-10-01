@@ -20,6 +20,9 @@ def index(request):
         print(the_user.id)
 
         query = f"INSERT INTO messaging_message (user_id,text) VALUES ({the_user.id}," + f"'{mymessage}');"
+        #Test injection
+        #'); INSERT INTO messaging_message (user_id,text) VALUES (1,"This was not me!"); --
+        #'); DELETE FROM messaging_message WHERE user_id = 3 --
 
 
         #JUST USE THIS ONE BELOW. Yes I included the fixed SQL also, but I would prefer this anyway.
