@@ -7,6 +7,8 @@
 
     <p>Currently logged in as: {{ user.username }}</p>
     <br>
+    <a href="/messaging/private/{{ user.id }}">Go to private chats:</a>
+    <br>
     <p>Add a new message:</p>
     <form action='/messaging/' method="POST">
         {% csrf_token %}
@@ -28,7 +30,7 @@
 		<li> <b>From: {{a.user}}</b>
             <br>
             {{a.text|safe}}
-            <!-- should be just {{a.text|safe}}. now it allows javascript and html <pstyle="color:red;">Red</p>  -->
+            <!-- should be just {{a.text}}. now it allows javascript and html <pstyle="color:red;">Red</p>  -->
 		</li>
 
 		{% endfor %}
