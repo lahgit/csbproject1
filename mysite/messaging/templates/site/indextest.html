@@ -29,7 +29,8 @@
 <br>        
 		<li> <b>From: {{a.user}}</b>
             <br>
-            {{a.text}}
+            {{a.text|safe}}
+            <!-- should be just {{a.text}}. now it allows javascript and html like <p style="color:red;">Red</p>  -->
 		</li>
 
 		{% endfor %}

@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from django.db import connection
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 
 from django.contrib.auth.models import User
 from .models import Message, PrivateMessage
@@ -13,7 +15,7 @@ def index(request):
         
         messagez = Message.objects.all()
         context = {'messages': messagez}
-        return render(request, 'site/index.html', context)
+        return render(request, 'site/indextest.html', context) #FIX THE FILE
     if request.method == 'POST':
         mymessage = request.POST.get('mymessage')
         the_user = User.objects.get(username=request.user)
@@ -39,49 +41,47 @@ def index(request):
 
         messagez = Message.objects.all()
         context = {'messages': messagez}
-        return render(request, 'site/index.html', context)
+        return render(request, 'site/indextest.html', context) #FIX THE FILE
 
-
-#    context = {'usrr': userr}
-#
-#    if request.method == 'GET':
-#        if request.user == userr:
-#            return render(request, 'site/settings.html', context)
-#        else:
-#             return redirect('/messaging')
-
-
-#    if request.method == 'POST':
-#
-#        if request.user == userr:
-#        
-#            fontsize = request.POST.get('fontsize')
-#            try:
-#                Fontsize.objects.create(user = userr.id, size = fontsize)
-#            except:
-#                a = Fontsize.objects.get(user = userr.id)
-#                a.size = fontsize
-#                a.save()
-#
-#            return render(request, 'site/settings.html', context)
-#        
-#        else: return redirect('/messaging')
 
 
 def private(request,pk):
-    private_messages = PrivateMessage.objects.all()
-    context = {'messages': private_messages}
+    try:
+        userr = User.objects.get(id=pk)
+    except:  return redirect('index')
     
-    userr = User.objects.get(id=pk)
+    #if userr == request.user:
+    private_messages = PrivateMessage.objects.all().filter(receiver=userr.username)
+    
+    
+    context = {'messages': private_messages,
+            'pk': pk,
+            'theuser': request.user}
 
     return render(request, 'site/privatechats.html', context)
+    #else: return redirect('index')
 
-
+@csrf_exempt
 def send(request,pk):
-    a = request.session['text'] = request.GET.get('text')
-    b = request.session['name'] = request.GET.get('name')
-    print(a,b)
-    return redirect('private', pk=pk)
+    
+    #User that you can get from pk
+    userr = User.objects.get(id=pk)
+
+    c = request.session['senderuser'] = request.GET.get('senderuser')
+    print(c)
+
+    #The actual user you are logged in as
+    the_user = request.user
+    print(the_user == c)
+
+    if userr == the_user:
+        a = request.session['text'] = request.GET.get('text')
+        b = request.session['name'] = request.GET.get('name')
+        print(a,b,c)
+        PrivateMessage.objects.create(user=the_user, receiver=b, text=a)
+        return redirect('private', pk=pk)
+    else:
+        return redirect('index')
 
 
     

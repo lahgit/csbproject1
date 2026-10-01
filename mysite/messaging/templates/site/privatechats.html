@@ -1,18 +1,5 @@
 <h1>Welcome to private chats</h1>
 
-<!--
-<p>send a new private message:</p>
-    <form action='/messaging/private/{{ user.id }}/' method="POST">
-        {% csrf_token %}
-
-        <p>Username</p>
-        <input type="text" name="receiver"/><br/>
-        <p>Message</p>
-        <input type="text" name="mymessage"/><br/>
-
-        <input type="submit" value="Send"/>
-    </form>
--->
    
     <form action='/messaging/private/{{ user.id }}/send' method="GET">
 
@@ -22,5 +9,21 @@
             <span>Message:</span><br/>
             <input type="text" name="text"/><br/>
 
-            <input type="submit" value="Transfer"/>
+            <input type="hidden" name="senderuser" value="{{ theuser }}">
+
+            <input type="submit" value="Send"/>
     </form>
+
+
+<h2>Sent to you:</h2>
+
+{% for a in messages %}
+<br>        
+		<li> <b>From: {{a.user}}</b>
+            <br>
+            {{a.text}}
+            
+		</li>
+
+		{% endfor %}
+		</ul>
