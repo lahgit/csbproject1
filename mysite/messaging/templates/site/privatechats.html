@@ -4,12 +4,11 @@
     <form action='/messaging/private/{{ user.id }}/send' method="GET">
 
             <p>Send message to user:</p>
-            <input type="text" name="name"/><br/>
-
-            <span>Message:</span><br/>
-            <input type="text" name="text"/><br/>
-
-            <input type="hidden" name="senderuser" value="{{ theuser }}">
+            <input type="text" name="name"/>
+            <br>
+            <p>Message:</p> 
+            <input type="text" name="text"/>
+            <br>
 
             <input type="submit" value="Send"/>
     </form>

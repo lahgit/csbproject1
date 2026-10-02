@@ -55,29 +55,44 @@ def private(request,pk):
     
     
     context = {'messages': private_messages,
-            'pk': pk,
-            'theuser': request.user}
+            'pk': pk}
 
     return render(request, 'site/privatechats.html', context)
     #else: return redirect('index')
 
-@csrf_exempt
+"""
 def send(request,pk):
     
     #User that you can get from pk
     userr = User.objects.get(id=pk)
 
-    c = request.session['senderuser'] = request.GET.get('senderuser')
-    print(c)
-
     #The actual user you are logged in as
     the_user = request.user
-    print(the_user == c)
+    print(the_user)
 
     if userr == the_user:
         a = request.session['text'] = request.GET.get('text')
         b = request.session['name'] = request.GET.get('name')
-        print(a,b,c)
+        print(a,b)
+        PrivateMessage.objects.create(user=the_user, receiver=b, text=a)
+        return redirect('private', pk=pk)
+    else:
+        return redirect('index')
+"""
+
+def send(request,pk):
+    
+    #User that you can get from pk
+    userr = User.objects.get(id=pk)
+
+    #The actual user you are logged in as
+    the_user = request.user
+    print(the_user)
+
+    if userr == the_user:
+        a = request.session['text'] = request.GET.get('text')
+        b = request.session['name'] = request.GET.get('name')
+        print(a,b)
         PrivateMessage.objects.create(user=the_user, receiver=b, text=a)
         return redirect('private', pk=pk)
     else:
