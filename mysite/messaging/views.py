@@ -79,7 +79,7 @@ def send(request,pk):
     else:
         return redirect('index')
 """
-FIXED VERSION HERE BELOW
+#FIXED VERSION HERE BELOW
 
 def send(request,pk):
     if request.method == 'GET':
