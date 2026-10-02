@@ -1,0 +1,28 @@
+<h1>Welcome to private chats</h1>
+
+   
+    <form action='/messaging/private/{{ user.id }}/send' method="POST">
+            {% csrf_token %}
+            <p>Send message to user:</p>
+            <input type="text" name="name"/>
+            <br>
+            <p>Message:</p> 
+            <input type="text" name="text"/>
+            <br>
+
+            <input type="submit" value="Send"/>
+    </form>
+
+
+<h2>Sent to you:</h2>
+
+{% for a in messages %}
+<br>        
+		<li> <b>From: {{a.user}}</b>
+            <br>
+            {{a.text}}
+            
+		</li>
+
+		{% endfor %}
+		</ul>

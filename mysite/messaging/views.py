@@ -57,7 +57,8 @@ def private(request,pk):
     context = {'messages': private_messages,
             'pk': pk}
 
-    return render(request, 'site/privatechats.html', context)
+    return render(request, 'site/privatechatsfixed.html', context)
+
     #else: return redirect('index')
 
 """
@@ -81,22 +82,25 @@ def send(request,pk):
 """
 
 def send(request,pk):
-    
-    #User that you can get from pk
-    userr = User.objects.get(id=pk)
-
-    #The actual user you are logged in as
-    the_user = request.user
-    print(the_user)
-
-    if userr == the_user:
-        a = request.session['text'] = request.GET.get('text')
-        b = request.session['name'] = request.GET.get('name')
-        print(a,b)
-        PrivateMessage.objects.create(user=the_user, receiver=b, text=a)
-        return redirect('private', pk=pk)
-    else:
+    if request.method == 'GET':
         return redirect('index')
+
+    if request.method == 'POST':
+        #User that you can get from pk
+        userr = User.objects.get(id=pk)
+
+        #The actual user you are logged in as
+        the_user = request.user
+
+
+        if userr == the_user:
+            a = request.session['text'] = request.POST.get('text')
+            b = request.session['name'] = request.POST.get('name')
+            print(a,b)
+            PrivateMessage.objects.create(user=the_user, receiver=b, text=a)
+            return redirect('private', pk=pk)
+        else:
+            return redirect('index')
 
 
     
