@@ -15,7 +15,7 @@ def index(request):
         
         messagez = Message.objects.all()
         context = {'messages': messagez}
-        return render(request, 'site/indextest.html', context) #FIX THE FILE
+        return render(request, 'site/indextest.html', context) #FIX THE FILE TO FIX XSS
     if request.method == 'POST':
         mymessage = request.POST.get('mymessage')
         the_user = User.objects.get(username=request.user)
@@ -24,7 +24,7 @@ def index(request):
         query = f"INSERT INTO messaging_message (user_id,text) VALUES ({the_user.id}," + f"'{mymessage}');"
         #Test injection
         #'); INSERT INTO messaging_message (user_id,text) VALUES (1,"This was not me!"); --
-        #'); DELETE FROM messaging_message WHERE user_id = 3 --
+        #'); DELETE FROM messaging_message WHERE user_id = 2 --
 
 
         #JUST USE THIS ONE BELOW. Yes I included the fixed SQL also, but I would prefer this anyway.
@@ -35,13 +35,12 @@ def index(request):
 
             #Should be just with sql
             #cursor.execute("INSERT INTO messaging_message (user_id,text) VALUES (?,?)",(the_user.id, mymessage))
-            #cursor.commit()
 
         
 
         messagez = Message.objects.all()
         context = {'messages': messagez}
-        return render(request, 'site/indextest.html', context) #FIX THE FILE
+        return render(request, 'site/indextest.html', context) #FIX THE FILE TO FIX XSS
 
 
 
@@ -50,18 +49,18 @@ def private(request,pk):
         userr = User.objects.get(id=pk)
     except:  return redirect('index')
     
-    #if userr == request.user:
+    #if userr == request.user: #Broken access
     private_messages = PrivateMessage.objects.all().filter(receiver=userr.username)
     
     
     context = {'messages': private_messages,
             'pk': pk}
 
-    return render(request, 'site/privatechatsfixed.html', context)
+    return render(request, 'site/privatechats.html', context) #FIX THIS WITH CSRF PROBLEM
 
     #else: return redirect('index')
 
-"""
+
 def send(request,pk):
     
     #User that you can get from pk
@@ -80,6 +79,7 @@ def send(request,pk):
     else:
         return redirect('index')
 """
+FIXED VERSION HERE BELOW
 
 def send(request,pk):
     if request.method == 'GET':
@@ -102,5 +102,5 @@ def send(request,pk):
         else:
             return redirect('index')
 
-
+"""
     
